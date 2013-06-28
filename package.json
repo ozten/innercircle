@@ -1,0 +1,14 @@
+{
+  "name": "Enclave",
+  "version": "0.0.0",
+  "dependencies" {
+    "restler": "2.0.1",
+    "qs": "0.6.5"
+  },
+  "devDependencies": {
+    "nodeunit": "0.8.1"
+  },
+  "scripts": {
+    "test": "nodeunit test/*.js"
+  }
+}
