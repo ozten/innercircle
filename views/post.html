@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block body %}
+<article class="h-entry">
+  <h1>{{ post.title }}</h1>
+  <p class="p-summary">{{ post.body }}</p>
+  <div class="e-content">{{ post.body }}</div>
+  <p>Published by <a href="" class="p-author h-card">Austin King</a>
+     on
+     <time class="dt-published" datetime="{{post.published}}">{{post.humanePublished}}</time>.
+     {% if post.published != post.updated %}
+       Last updated at
+       <time class="dt-updated" datetime="{{post.updated}}">{{post.humaneUpdated}}</time>.</p>
+     {% endif %}
+</article>
+
+<p>{{ post.audience }}</p>
+
+{% endblock %}

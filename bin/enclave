@@ -1,0 +1,126 @@
+var express = require('express');
+var moment = require('moment');
+var nunjucks = require('nunjucks');
+
+var app = express();
+
+var env = new nunjucks.Environment(new nunjucks.FileSystemLoader('views'));
+env.express(app);
+
+var SQLiteStore = require('connect-sqlite3')(express);
+
+var cms = require('../lib/cms');
+
+
+console.log('Starting up');
+
+app.use(express.bodyParser());
+app.use(express.methodOverride());
+app.use(express.cookieParser());
+app.use(express.session({
+    secret: "keyboard cat",
+    store: new SQLiteStore
+}));
+
+
+app.use(function(req, res, next) {
+
+    console.log('middleware');
+
+    if (req.session && req.session.email) {
+        app.locals({
+            loggedInUser: '"' + req.session.email + '"'
+        });
+    } else {
+        app.locals({
+            loggedInUser: 'null'
+        });
+    }
+    next();
+});
+
+require("express-persona")(app, {
+    audience: "http://localhost:3666" // Must match your browser's address bar
+});
+
+
+app.get('/', function(req, res) {
+    res.render('homepage.html');
+});
+
+app.get('/access_denied', function(req, res) {
+    res.render('access_denied.html');
+});
+
+var checkAudience = function(audienceCb, req, res, next) {
+    if (audienceCb(req.session.email)) {
+        next();
+    } else {
+        res.redirect('/access_denied');
+    }
+};
+
+var checkOwnership = function(req, res, next) {
+    if (!req.session || req.session.email !== 'shout@ozten.com') {
+        res.redirect('/access_denied');
+    }
+    next();
+};
+
+app.get('/editor', checkOwnership, function(req, res) {
+    res.render('editor.html', {
+        post: {
+            slug: null,
+            title: null,
+            body: null,
+            audience: null
+        }
+    });
+});
+
+app.get('/editor/:slug', checkOwnership, function(req, res) {
+    cms.loadPost(req.params.slug, function(err, post) {
+
+        res.render('editor.html', {
+            post: post
+        });
+    });
+
+});
+
+app.post('/editor', checkOwnership, function(req, res) {
+    console.log('POSTED');
+    console.log(req.body);
+    var data = req.body;
+    if (!data.postslug) {
+        data.postslug = cms.slugify(data);
+    }
+    var created = data.createdt || new Date().getTime();
+    cms.savePost(data.postslug, data.posttitle,
+        data.postbody, data.postaudience, created,
+        function(err) {
+        res.redirect('/editor/' + data.postslug);
+    });
+});
+
+// Deafult route, catches all other traffic
+app.get('/:slug', function(req, res) {
+    checkAudience(function(email) {
+        console.log('check audience callback with email=' + email);
+        return true;
+    }, req, res, function() {
+        cms.loadPost(req.params.slug, function(err, post) {
+            post.published = new Date(post.createdt).toISOString();
+            post.humanePublished = moment(post.createdt).calendar();
+
+            post.updated = new Date(post.updatedt).toISOString();
+            post.humaneUpdated = moment(post.updatedt).calendar();
+            res.render('post.html', {
+                post: post
+            });
+
+        });
+    });
+});
+
+app.listen(3666);

@@ -39,6 +39,10 @@ I can iterate on my original post.
 
 Someone can like my post, I get notified.
 
+It's like writing a letter.
+
+s/Sent from my iPhone/Sent to my Enclave/
+
 ## Data Schema
 
 article
@@ -69,3 +73,8 @@ Example: address:shout@ozten.com, contact:AustinKing audience:HomebrewClub
 
 Things exist... but you need pages of them for listing as well as search
 Pages of ids.
+
+## TODOs
+
+* Allow mentioning people in the main body area
+* Quick Contact add with unstructured text

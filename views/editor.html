@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block body %}
+<form action="/editor" method="POST">
+  <span class="labellike">Slug</span> <a href="/{{post.slug}}">{{ post.slug }}</a>
+
+  <fieldset>
+    <label for="posttitle">Title</label>
+    <input id="posttitle" name="posttitle" value="{{ post.title }}" />
+  </fieldset>
+  <fieldset>
+    <label for="postbody">Body</label>
+    <textarea id="postbody" name="postbody" cols="80" rows="30">{{ post.body }}</textarea>
+  </fieldset>
+  <fieldset>
+    <label for="postaudience">Audiences</label>
+    <input id="postaudience" name="postaudience" value="{{ post.audience }}" />
+  </fieldset>
+  <fieldset>
+    <button id="save" name="save">Save</button>
+    <button id="cancel" name="cancel">Cancel</button>
+  </fieldset>
+</form>
+{% endblock %}
