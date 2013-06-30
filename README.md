@@ -76,6 +76,13 @@ Pages of ids.
 
 ## TODOs
 * Make posts .json file extension
+* Style pages
+* Add settings panel
+  * Make owners
 * Allow mentioning people in the main body area
 * Quick Contact add with unstructured text
 * webmention support
+* Email myself on
+  * In bound webmention
+* Email/SMS/Tweak on
+  * Writing new pages
