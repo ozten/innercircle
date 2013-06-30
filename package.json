@@ -10,6 +10,7 @@
     "nunjucks": "0.1.9",
     "optimist": "0.6.0",
     "restler": "2.0.1",
+    "sanitizer": "0.0.15",
     "qs": "0.6.5"
   },
   "devDependencies": {

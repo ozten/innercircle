@@ -78,3 +78,4 @@ Pages of ids.
 * Make posts .json file extension
 * Allow mentioning people in the main body area
 * Quick Contact add with unstructured text
+* webmention support

@@ -11,6 +11,19 @@
        Last updated at
        <time class="dt-updated" datetime="{{post.updated}}">{{post.humaneUpdated}}</time>.</p>
      {% endif %}
+  {% if post.comments %}
+    <h2>Comments</h2>
+    {% for c in post.comments %}
+      <p>
+        {% for a in c.properties.author %}
+          <span class="author">{{a.value}}</span>
+        {% endfor %}
+        said {{c.properties.content}}
+        on <a href="{{c.sourceUrl}}" rel="nofolow">{{c.properties.published}}</a></p>
+    {% endfor %}
+  {% endif %}
+
+
 </article>
 
 {% endblock %}

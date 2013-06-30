@@ -8,6 +8,7 @@
   {% if loggedInUser == 'null' %}
     <button id="login">Sign in</button>
   {% else %}
+    <a href="/editor">New Post</a>
     {{loggedInUser}} <button id="logout">Logout</button>
   {% endif %}
 </nav>
