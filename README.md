@@ -75,6 +75,6 @@ Things exist... but you need pages of them for listing as well as search
 Pages of ids.
 
 ## TODOs
-
+* Make posts .json file extension
 * Allow mentioning people in the main body area
 * Quick Contact add with unstructured text

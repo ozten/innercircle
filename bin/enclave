@@ -1,18 +1,40 @@
 var express = require('express');
 var moment = require('moment');
 var nunjucks = require('nunjucks');
-
-var app = express();
-
-var env = new nunjucks.Environment(new nunjucks.FileSystemLoader('views'));
-env.express(app);
-
+var optimist = require('optimist');
 var SQLiteStore = require('connect-sqlite3')(express);
 
 var cms = require('../lib/cms');
+var webmention = require('../lib/webmention');
 
+argv = optimist.usage('Usage: $0 [--port=3666]')
+    .options('p', {
+      alias: 'port',
+      "default": '3666',
+      describe: 'Port to listen on'
+    })
+    .options('h', {
+      alias: 'hostname',
+      "default": 'localhost',
+      describe: 'Public hostname for this service'
+    })
+    .options('protocol', {
+        "default": "http",
+        describe: 'http or https protocol'
+    })
+    .options('d', {
+        alias: 'data',
+        "default": "./data",
+        describe: 'Directory to store data files'
+    })
+    .argv;
 
-console.log('Starting up');
+cms.setDataDirectory(argv.data);
+
+var app = express();
+var env = new nunjucks.Environment(new nunjucks.FileSystemLoader('views'));
+
+env.express(app);
 
 app.use(express.bodyParser());
 app.use(express.methodOverride());
@@ -22,11 +44,12 @@ app.use(express.session({
     store: new SQLiteStore
 }));
 
+var audience = argv.protocol + '://' + argv.hostname + ':' + argv.port;
+app.locals({
+  audience: audience
+});
 
 app.use(function(req, res, next) {
-
-    console.log('middleware');
-
     if (req.session && req.session.email) {
         app.locals({
             loggedInUser: '"' + req.session.email + '"'
@@ -40,12 +63,30 @@ app.use(function(req, res, next) {
 });
 
 require("express-persona")(app, {
-    audience: "http://localhost:3666" // Must match your browser's address bar
+    audience: audience
+});
+
+/* Anonymous Authorized routes */
+app.get('/', function(req, res) {
+    res.render('homepage.html');
 });
 
 
-app.get('/', function(req, res) {
-    res.render('homepage.html');
+app.post('/webmention', function(req, res) {
+    console.log(req.body);
+    var source = req.body.source;
+    var target = req.body.target;
+    console.log(source, target);
+    if (! source || ! target) {
+        res.send("Missing source or target", 400);
+    }
+    // Does the post they are talking about exist?
+    // Does their post exist and mention our url?
+    //
+    webmention(source, target, function(err, comment) {
+        if (err) return res.send(err, 400);
+        res.send(comment);
+    });
 });
 
 app.get('/access_denied', function(req, res) {
@@ -61,7 +102,8 @@ var checkAudience = function(audienceCb, req, res, next) {
 };
 
 var checkOwnership = function(req, res, next) {
-    if (!req.session || req.session.email !== 'shout@ozten.com') {
+    if (!req.session ||
+        ['shout@ozten.com', 'eozten@yahoo.com'].indexOf(req.session.email) === -1) {
         res.redirect('/access_denied');
     }
     next();
@@ -123,4 +165,5 @@ app.get('/:slug', function(req, res) {
     });
 });
 
-app.listen(3666);
+app.listen(argv.port);
+console.log("You're Enclave is at ", audience);
