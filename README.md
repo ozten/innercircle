@@ -1,4 +1,4 @@
-# Enclave
+# Inner Cirlce
 
 Everyone should have a circle of trusted friends. Maybe several, for different audiences.
 
