@@ -11,24 +11,28 @@ var webmention = require('../lib/webmention_receive');
 
 argv = optimist.usage('Usage: $0 [--port=3666]')
     .options('p', {
-    alias: 'port',
-    "default": '3666',
-    describe: 'Port to listen on'
-})
+        alias: 'port',
+        "default": '3666',
+        describe: 'Port to listen on'
+    })
     .options('h', {
-    alias: 'hostname',
-    "default": 'localhost',
-    describe: 'Public hostname for this service'
-})
+        alias: 'hostname',
+        "default": 'localhost',
+        describe: 'Public hostname for this service'
+    })
+    .options('a', {
+        alias: 'audience',
+        describe: 'Public base url for this service, overridees protocol, hostname and port'
+    })
     .options('protocol', {
-    "default": "http",
-    describe: 'http or https protocol'
-})
+        "default": "http",
+        describe: 'http or https protocol'
+    })
     .options('d', {
-    alias: 'data',
-    "default": "./data",
-    describe: 'Directory to store data files'
-})
+        alias: 'data',
+        "default": "./data",
+        describe: 'Directory to store data files'
+    })
     .argv;
 
 cms.setDataDirectory(argv.data);
@@ -47,6 +51,9 @@ app.use(express.session({
 }));
 
 var audience = argv.protocol + '://' + argv.hostname + ':' + argv.port;
+if (!! argv.a) {
+    audience = argv.a;
+}
 app.locals({
     audience: audience
 });
@@ -160,7 +167,6 @@ app.get('/:slug', function(req, res) {
         return true;
     }, req, res, function() {
         cms.loadPost(req.params.slug, function(err, post) {
-            console.log(post.body);
             post.body = markdown.toHTML(post.body);
             console.log(post.body);
             post.published = new Date(post.createdt).toISOString();
