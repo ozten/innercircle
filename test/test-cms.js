@@ -22,5 +22,12 @@ module.exports = {
       test.ok(true);
     }
     test.done();
+  },
+  "Slugify with multiple spaces does the right thing": function(test) {
+    var post = {
+      posttitle: 'Hello cruel world!'
+    };
+    test.equal(cms.slugify(post), 'hello_cruel_world');
+    test.done();
   }
 };
