@@ -132,7 +132,7 @@ app.get('/editor', checkOwnership, function(req, res) {
 
 app.get('/editor/:slug', checkOwnership, function(req, res) {
     cms.loadPost(req.params.slug, function(err, post) {
-
+        if (err) return res.render('error.html', {error: err});
         res.render('editor.html', {
             post: post
         });
@@ -167,6 +167,9 @@ app.get('/:slug', function(req, res) {
         return true;
     }, req, res, function() {
         cms.loadPost(req.params.slug, function(err, post) {
+            if (err) {
+                return res.render('error.html', {error: err});
+            }
             post.body = markdown.toHTML(post.body);
             console.log(post.body);
             post.published = new Date(post.createdt).toISOString();
