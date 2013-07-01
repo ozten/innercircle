@@ -1,29 +1,35 @@
 {% extends "layout.html" %}
 {% block body %}
-<article class="h-entry">
-  <h1>{{ post.title }}</h1>
-  <p>Hi {{ post.audience }}</p>
-  <div class="e-content">{{ post.body }}</div>
-  <p>Published by <a href="" class="p-author h-card">Austin King</a>
-     on
-     <time class="dt-published" datetime="{{post.published}}">{{post.humanePublished}}</time>.
-     {% if post.published != post.updated %}
-       Last updated at
-       <time class="dt-updated" datetime="{{post.updated}}">{{post.humaneUpdated}}</time>.</p>
-     {% endif %}
-  {% if post.comments %}
-    <h2>Comments</h2>
-    {% for c in post.comments %}
-      <p>
-        {% for a in c.properties.author %}
-          <span class="author">{{a.value}}</span>
+<div class="row">
+  <div class="large-2 columns">&nbsp;</div>
+  <div class="large-8 columns">
+    <article class="h-entry">
+      <h1>{{ post.title }}</h1>
+      <p>Hi {{ post.audience }}</p>
+      <div class="e-content">{{ post.body }}</div>
+      <p>Published by <a href="" class="p-author h-card">Austin King</a>
+         on
+         <time class="dt-published" datetime="{{post.published}}">{{post.humanePublished}}</time>.
+         {% if post.published != post.updated %}
+           Last updated at
+           <time class="dt-updated" datetime="{{post.updated}}">{{post.humaneUpdated}}</time>.
+         {% endif %}
+       </p>
+      {% if post.comments %}
+        <h2>Comments</h2>
+        <div class="comments" >
+        {% for c in post.comments %}
+          <p>
+            {% for a in c.properties.author %}
+              <span class="author">{{a.value}}</span>
+            {% endfor %}
+            said {{c.properties.content}}
+            on <a href="{{c.sourceUrl}}" rel="nofolow">{{c.properties.published}}</a></p>
         {% endfor %}
-        said {{c.properties.content}}
-        on <a href="{{c.sourceUrl}}" rel="nofolow">{{c.properties.published}}</a></p>
-    {% endfor %}
-  {% endif %}
-
-
-</article>
-
+        </div>
+      {% endif %}
+    </article>
+  </div>
+  <div class="large-2 columns"></div>
+</div>
 {% endblock %}

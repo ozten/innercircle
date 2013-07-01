@@ -147,6 +147,8 @@ app.post('/editor', checkOwnership, function(req, res) {
     });
 });
 
+app.use(express.static('static'));
+
 // Deafult route, catches all other traffic
 app.get('/:slug', function(req, res) {
     //Link: <http://news.indiewebcamp.com/webmention>; rel="http://webmention.org/"

@@ -74,6 +74,9 @@ Example: address:shout@ozten.com, contact:AustinKing audience:HomebrewClub
 Things exist... but you need pages of them for listing as well as search
 Pages of ids.
 
+## CSS Framework
+Foundation 4.2.3
+
 ## TODOs
 * Make posts .json file extension
 * Style pages
