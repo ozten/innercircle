@@ -1,10 +1,11 @@
 {
-  "name": "Enclave",
+  "name": "innercircle",
   "version": "0.0.0",
   "dependencies": {
     "connect-sqlite3": "0.9.2",
     "express": "3.3.1",
     "express-persona": "0.0.9",
+    "markdown": "git://github.com/ozten/markdown-js.git",
     "microformat-node": "0.2.1",
     "moment": "2.0.0",
     "nunjucks": "0.1.9",
@@ -17,7 +18,7 @@
     "nodeunit": "0.8.1"
   },
   "scripts": {
-    "start": "node bin/enclave",
+    "start": "node bin/innercircle",
     "test": "nodeunit test/*.js"
   }
 }

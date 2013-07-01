@@ -5,27 +5,28 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width" />
-  <title>Foundation 4</title>
+  <title>{%block title %}Letter's for Austin's Inner Circle{%endblock%}</title>
 
 
   <link href="{{ audience }}/webmention" rel="http://webmention.org/" />
   <link rel="stylesheet" href="css/foundation.css" />
+  <link rel="stylesheet" href="css/style.css" />
 
 
   <script src="js/vendor/custom.modernizr.js"></script>
 
 </head>
 <body>
-<div class="row">
-  <div class="large-6 columns"><a href="/">Austin's InnerCircle</a></div>
+<header class="row">
+  <div class="large-6 columns"><a href="/" class="nav logo">Austin's InnerCircle</a></div>
   <div class="large-2 columns">
     {% if loggedInUser != 'null' %}
-      <a href="/editor">New Post</a>
+      <a href="/editor" class="button">New Post</a>
     {% endif %}
   </div>
   <div class="large-2 columns">
     {% if loggedInUser != 'null' %}
-      {{loggedInUser}}
+      <div  class="nav">{{loggedInUser}}</div>
     {% endif %}
   </div>
   <div class="large-2 columns">
@@ -35,10 +36,8 @@
      <button id="logout">Logout</button>
   {% endif %}
   </div><!-- .large-2 .columns -->
-</div><!-- .row -->
+</header><!-- .row -->
 {% block body %}{% endblock %}
-
-
 
   <script>
   document.write('<script src=' +
@@ -50,7 +49,7 @@
   <script src="https://login.persona.org/include.js"></script>
 <script>
 var b = document;
-if (b) {
+if (b && b.querySelector("#login")) {
   b.querySelector("#login").addEventListener("click", function() {
     navigator.id.request();
   }, false);
@@ -59,6 +58,7 @@ if (b) {
 b = document.querySelector("#logout");
 if (b) {
   b.addEventListener("click", function() {
+    alert('logging out');
     navigator.id.logout();
   }, false);
 }
@@ -72,7 +72,8 @@ navigator.id.watch({
     xhr.addEventListener("loadend", function(e) {
       var data = JSON.parse(this.responseText);
       if (data && data.status === "okay") {
-        console.log("You have been logged in as: " + data.email);
+        //console.log("You have been logged in as: " + data.email);
+        window.location.reload(true);
       }
     }, false);
 
@@ -84,7 +85,8 @@ navigator.id.watch({
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "/persona/logout", true);
     xhr.addEventListener("loadend", function(e) {
-      console.log("You have been logged out");
+      //console.log("You have been logged out");
+      window.location.reload(true);
     });
     xhr.send();
   }

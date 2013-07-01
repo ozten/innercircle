@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+{%block title %}{{ post.title }} - Austin's Inner Circle{%endblock%}
 {% block body %}
 <div class="row">
   <div class="large-2 columns">&nbsp;</div>
@@ -6,7 +7,7 @@
     <article class="h-entry">
       <h1>{{ post.title }}</h1>
       <p>Hi {{ post.audience }}</p>
-      <div class="e-content">{{ post.body }}</div>
+      <div class="e-content">{{ post.body | safe }}</div>
       <p>Published by <a href="" class="p-author h-card">Austin King</a>
          on
          <time class="dt-published" datetime="{{post.published}}">{{post.humanePublished}}</time>.
@@ -14,12 +15,14 @@
            Last updated at
            <time class="dt-updated" datetime="{{post.updated}}">{{post.humaneUpdated}}</time>.
          {% endif %}
+         <a href="/editor/{{post.slug}}" class="button">Edit</a>
        </p>
       {% if post.comments %}
+      <div class="comments" >
         <h2>Comments</h2>
-        <div class="comments" >
+        <div class="row">
         {% for c in post.comments %}
-          <p>
+          <p class="large-12 columns">
             {% for a in c.properties.author %}
               <span class="author">{{a.value}}</span>
             {% endfor %}
@@ -27,6 +30,7 @@
             on <a href="{{c.sourceUrl}}" rel="nofolow">{{c.properties.published}}</a></p>
         {% endfor %}
         </div>
+      </div>
       {% endif %}
     </article>
   </div>

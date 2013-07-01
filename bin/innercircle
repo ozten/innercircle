@@ -1,4 +1,5 @@
 var express = require('express');
+var markdown = require('markdown').markdown;
 var moment = require('moment');
 var nunjucks = require('nunjucks');
 var optimist = require('optimist');
@@ -159,6 +160,9 @@ app.get('/:slug', function(req, res) {
         return true;
     }, req, res, function() {
         cms.loadPost(req.params.slug, function(err, post) {
+            console.log(post.body);
+            post.body = markdown.toHTML(post.body);
+            console.log(post.body);
             post.published = new Date(post.createdt).toISOString();
             post.humanePublished = moment(post.createdt).calendar();
 
@@ -173,4 +177,4 @@ app.get('/:slug', function(req, res) {
 });
 
 app.listen(argv.port);
-console.log("You're Enclave is at ", audience);
+console.log("You're InnerCircle is at ", audience);

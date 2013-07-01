@@ -1,0 +1,23 @@
+.nav {
+    display: inline-block;
+    padding-top: 13px;
+}
+.logo {
+    font-size: 24px;
+    font-weight: 900;
+}
+h1 {
+    color: #666;
+}
+
+li {
+    margin-left: 30px;
+}
+
+.comments h2 {
+    font-size: 24px;
+}
+.comments {
+    background-color: #DDD;
+
+}
