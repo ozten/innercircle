@@ -1,0 +1,14 @@
+#!/usr/bin/env node
+var webmention = require('../lib/webmention_send');
+
+var argv = require('optimist')
+  .usage('Usage: $0 ourSourceUrl theirTargetUrl')
+  .argv;
+
+var ourSource = argv._[0];
+var theirTarget = argv._[1];
+
+console.log('Our post', ourSource);
+console.log('Mentions', theirTarget);
+
+webmention(ourSource, theirTarget);
