@@ -2,6 +2,6 @@ innercircle:
     type: nodejs
     approot: .
     processes:
-        app: node ./bin/innercircle -a http://innercircle.aok.io --port=8080 -h innercircle.aok.io -d /home/dotcloud/data >> /var/log/supervisor/app.log
+        app: node ./bin/innercircle -a http://innercircle.aok.io --port=8080 -h innercircle.aok.io --mailgun-api-key=XXX -d /home/dotcloud/data >> /var/log/supervisor/app.log
     config:
         node_version: v0.8.x

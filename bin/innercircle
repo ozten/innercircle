@@ -7,6 +7,7 @@ var SQLiteStore = require('connect-sqlite3')(express);
 
 var cms = require('../lib/cms');
 var doWebmention = require('../lib/do_webmentions');
+var mailgun = require('../lib/mailgun');
 var webmention = require('../lib/webmention_receive');
 
 argv = optimist.usage('Usage: $0 [--port=3666]')
@@ -32,6 +33,23 @@ argv = optimist.usage('Usage: $0 [--port=3666]')
         alias: 'data',
         "default": "./data",
         describe: 'Directory to store data files'
+    })
+    .options('mailgun-api-key', {
+        describe: 'Mailgun API Key'
+    })
+    .options('f', {
+        alias: 'from',
+        "default": 'Austin King <austin@ozten.mailgun.org>',
+        describe: 'From: field'
+    })
+    .options('t', {
+        alias: 'to',
+        "default": 'Austin King <shout@ozten.com>',
+        describe: 'To: field'
+    })
+    .options('mailgun-api-url', {
+        "default": 'https://api.mailgun.net/v2/ozten.mailgun.org/messages',
+        describe: 'Mailgun service url'
     })
     .argv;
 
@@ -95,6 +113,22 @@ app.post('/webmention', function(req, res) {
     //
     webmention(source, target, function(err, comment) {
         if (err) return res.send(err, 400);
+        try {
+            mailgun([argv.t], {
+              s: 'Webmention from ' + source,
+              b: ["Wemention here... I did you know that",
+                  source,
+                  "was discussing",
+                  target,
+                  "pretty cool, huh?"].join('\n'),
+              "mailgun-api-key": argv["mailgun-api-key"],
+              f: argv.f,
+              "mailgun-api-url": argv["mailgun-api-url"]
+            });
+        } catch (e) {
+           console.log('Error sending webmention notification email');
+           console.log(e);
+        }
         res.send(comment);
     });
 });
