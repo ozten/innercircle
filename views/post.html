@@ -21,14 +21,16 @@
       <div class="comments" >
         <h2>Comments</h2>
         <div class="row">
+          <div class="large-12 columns">
         {% for c in post.comments %}
-          <p class="large-12 columns">
             {% for a in c.properties.author %}
               <span class="author">{{a.value}}</span>
             {% endfor %}
             said {{c.properties.content}}
-            on <a href="{{c.sourceUrl}}" rel="nofolow">{{c.properties.published}}</a></p>
+            on <a href="{{c.sourceUrl}}" rel="nofolow">{{c.properties.published}}</a>
+            <hr />
         {% endfor %}
+          </div>
         </div>
       </div>
       {% endif %}
