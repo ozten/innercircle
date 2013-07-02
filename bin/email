@@ -1,0 +1,37 @@
+#!/usr/bin/env node
+
+var argv = require('optimist')
+    .options('s', {
+        alias: 'subject',
+        "default": 'test email' + new Date(),
+        describe: 'The subject of the email'
+    })
+    .options('b', {
+        alias: 'body',
+        "default": 'A test email send at ' + new Date(),
+        describe: 'The body of the email'
+    })
+    .options('mailgun-api-key', {
+        describe: 'Mailgun API Key'
+    })
+    .options('f', {
+        alias: 'from',
+        "default": 'Austin King <austin@ozten.mailgun.org>',
+        describe: 'From: field'
+    })
+    .options('t', {
+        alias: 'to',
+        "default": 'Austin King <shout@ozten.com>',
+        describe: 'To: field'
+    })
+    .options('mailgun-api-url', {
+        "default": 'https://api.mailgun.net/v2/ozten.mailgun.org/messages',
+        describe: 'Mailgun service url'
+    })
+    .argv;
+
+var mailgun = require('../lib/mailgun');
+
+mailgun([argv.t], argv);
+
+console.log(argv['mailgun-api-key']);

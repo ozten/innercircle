@@ -1,5 +1,5 @@
 var express = require('express');
-var markdown = require('markdown').markdown;
+var marked = require('marked');
 var moment = require('moment');
 var nunjucks = require('nunjucks');
 var optimist = require('optimist');
@@ -54,6 +54,23 @@ argv = optimist.usage('Usage: $0 [--port=3666]')
     .argv;
 
 cms.setDataDirectory(argv.data);
+
+marked.setOptions({
+  gfm: true,
+  tables: true,
+  breaks: false,
+  pedantic: false,
+  sanitize: false,
+  smartLists: true,
+  smartypants: false,
+  langPrefix: 'language-',
+  highlight: function(code, lang) {
+    if (lang === 'js') {
+      return highlighter.javascript(code);
+    }
+    return code;
+  }
+});
 
 var app = express();
 var env = new nunjucks.Environment(new nunjucks.FileSystemLoader('views'));
@@ -204,7 +221,7 @@ app.get('/:slug', function(req, res) {
             if (err) {
                 return res.render('error.html', {error: err});
             }
-            post.body = markdown.toHTML(post.body);
+            post.body = marked(post.body);
             console.log(post.body);
             post.published = new Date(post.createdt).toISOString();
             post.humanePublished = moment(post.createdt).calendar();
