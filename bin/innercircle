@@ -51,9 +51,16 @@ argv = optimist.usage('Usage: $0 [--port=3666]')
         "default": 'https://api.mailgun.net/v2/ozten.mailgun.org/messages',
         describe: 'Mailgun service url'
     })
+    .options('storage', {
+        "default": 'files',
+        describe: 'Backend for storing content. Values: (files|camlistore)'
+    });
     .argv;
 
-cms.setDataDirectory(argv.data);
+cms.setDataDirectory({
+  'storage': argv.storage,
+  'path': argv.data
+});
 
 marked.setOptions({
   gfm: true,
