@@ -14,7 +14,9 @@ module.exports = {
         camliCms.savePost(slug, title, post, audience, created, function(err, id) {
             test.ok(!err);
             test.ok(id);
+
             permanode = id;
+
             test.done();
         });
     },
@@ -28,10 +30,13 @@ module.exports = {
             test.equal(post.audience, 'People of Earth');
             test.done();
         });
-    },
-    /*'We can add comments': function(test) {
+    }
+    /*
+    'We can add comments': function(test) {
         camliCms.addComment(slug, "You suck!", cb) {
-    },*/
+    },
+    */
+    /*
     'We can update an existing post': function(test) {
         var newTitle = 'A First Post',
             newBody = 'Is hard to write';
@@ -52,4 +57,5 @@ module.exports = {
             });
         });
     }
+    */
 };
