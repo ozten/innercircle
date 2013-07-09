@@ -30,12 +30,26 @@ module.exports = {
             test.equal(post.audience, 'People of Earth');
             test.done();
         });
-    }
-    /*
-    'We can add comments': function(test) {
-        camliCms.addComment(slug, "You suck!", cb) {
     },
-    */
+
+    'We can add comments': function(test) {
+        console.log('============================== add ========');
+        camliCms.addComment(slug, "You suck!", function(err, comments) {
+            test.ok(!err);
+            test.ok(comments);
+            test.done();
+        });
+    },
+    'We can read comments': function(test) {
+        console.log('============================== read ========');
+        camliCms.loadComments(slug, function(err, comments) {
+            console.log('==== AOK called back ====', slug);
+            test.ok(!err);
+            test.ok(comments[0], "You Suck!");
+            test.done();
+        });
+    }
+
     /*
     'We can update an existing post': function(test) {
         var newTitle = 'A First Post',
