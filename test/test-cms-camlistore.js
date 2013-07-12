@@ -45,7 +45,7 @@ module.exports = {
         camliCms.loadComments(slug, function(err, comments) {
             console.log('==== AOK called back ====', slug);
             test.ok(!err);
-            test.ok(comments[0], "You Suck!");
+            test.ok(comments.comments[0], "You Suck!");
             test.done();
         });
     }
