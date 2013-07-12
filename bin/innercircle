@@ -54,7 +54,7 @@ argv = optimist.usage('Usage: $0 [--port=3666]')
     .options('storage', {
         "default": 'files',
         describe: 'Backend for storing content. Values: (files|camlistore)'
-    });
+    })
     .argv;
 
 cms.setDataDirectory({
