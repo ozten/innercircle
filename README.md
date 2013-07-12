@@ -89,3 +89,8 @@ Foundation 4.2.3
   * In bound webmention
 * Email/SMS/Tweak on
   * Writing new pages
+
+## STATUS
+* File based backend used on my personal site and works
+* Camlistore backend mid-development
+  * Left off in test-cms-camlistore.js

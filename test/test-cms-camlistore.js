@@ -12,6 +12,10 @@ module.exports = {
             created = new Date();
 
         camliCms.savePost(slug, title, post, audience, created, function(err, id) {
+            if (err && 'ECONNREFUSED' === err.errno) {
+                console.log('CAMLISTORE is not running. Quiting tests');
+                process.exit(1);
+            }
             test.ok(!err);
             test.ok(id);
 
@@ -22,6 +26,7 @@ module.exports = {
     },
     'We can load an existing post': function(test) {
         camliCms.loadPost(slug, function(err, post) {
+
             test.ok(!err);
             test.ok(post);
             test.equal(post.slug, slug);
@@ -33,19 +38,21 @@ module.exports = {
     },
 
     'We can add comments': function(test) {
-        console.log('============================== add ========');
-        camliCms.addComment(slug, "You suck!", function(err, comments) {
+        camliCms.addComment(slug, {
+            properties: {
+                content: "You suck!"
+            },
+            published: new Date().toString()
+        }, function(err, comments) {
             test.ok(!err);
             test.ok(comments);
             test.done();
         });
     },
     'We can read comments': function(test) {
-        console.log('============================== read ========');
         camliCms.loadComments(slug, function(err, comments) {
-            console.log('==== AOK called back ====', slug);
             test.ok(!err);
-            test.ok(comments.comments[0], "You Suck!");
+            test.equal(comments.comments[0].properties.content, "You suck!");
             test.done();
         });
     }
