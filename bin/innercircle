@@ -3,6 +3,7 @@ var marked = require('marked');
 var moment = require('moment');
 var nunjucks = require('nunjucks');
 var optimist = require('optimist');
+var path = require('path');
 var SQLiteStore = require('connect-sqlite3')(express);
 
 var cms = require('../lib/cms');
@@ -31,7 +32,7 @@ argv = optimist.usage('Usage: $0 [--port=3666]')
     })
     .options('d', {
         alias: 'data',
-        "default": "./data",
+        "default": "../data",
         describe: 'Directory to store data files'
     })
     .options('mailgun-api-key', {
@@ -59,7 +60,7 @@ argv = optimist.usage('Usage: $0 [--port=3666]')
 
 cms.setDataDirectory({
   'storage': argv.storage,
-  'path': argv.data
+  'path': path.join(__dirname, argv.data)
 });
 
 marked.setOptions({
